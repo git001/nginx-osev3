@@ -11,6 +11,9 @@ RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC64107
 	&& apt-get install -y ca-certificates nginx=${NGINX_VERSION} gettext-base socat \
 	&& rm -rf /var/lib/apt/lists/*
 
+# replace access_log line with env vars
+# sed -e's/access_log.*/access_log syslog:server=\$\{NGINX_TEST_PORT_8514_UDP_ADDR\}:\$\{NGINX_TEST_PORT_8514_UDP_PORT\};/' /etc/nginx/nginx.conf > /tmp/nginx.conf
+
 # forward request and error logs to docker log collector
 RUN  ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
