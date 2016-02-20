@@ -97,7 +97,7 @@ items:
            - -d
            - -d
            - -u
-           - udp4-listen:8514,fork 
+           - udp4-listen:8514,fork
            - "-"
           ports:
           - containerPort: 8514
@@ -105,9 +105,10 @@ items:
         - name: nginx-test
           image: nginx-test:latest
           command:
-           - /bin/bash
-           - -c
-           - sleep 500
+           - /nginx-wrapper.sh
+          env:
+          - name: WORKER_PROCESSES
+            value: "2"
           ports:
           - containerPort: 8080
             protocol: TCP
