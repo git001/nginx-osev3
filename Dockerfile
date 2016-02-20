@@ -8,26 +8,19 @@ ENV NGINX_VERSION 1.9.11-1~jessie
 RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \
 	&& echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
 	&& apt-get update \
-	&& apt-get install -y ca-certificates nginx=${NGINX_VERSION} gettext-base socat \
-	&& rm -rf /var/lib/apt/lists/*
+	&& DEBIAN_FRONTEND="noninteractive" \
+	  apt-get install -y --no-install-recommends ca-certificates nginx=${NGINX_VERSION} gettext-base socat \
+	&& apt-get -y clean autoclean \
+	&& apt-get -y autoremove \
+	&& rm -rf /var/lib/{apt,dpkg,cache,log}/ \
+	&& chmod 777 /var/cache/nginx
 
-# replace access_log line with env vars
-# sed -e's/access_log.*/access_log syslog:server=\$\{NGINX_TEST_PORT_8514_UDP_ADDR\}:\$\{NGINX_TEST_PORT_8514_UDP_PORT\};/' /etc/nginx/nginx.conf > /tmp/nginx.conf
-
-# forward request and error logs to docker log collector
-RUN  ln -sf /dev/stdout /var/log/nginx/access.log \
-  && ln -sf /dev/stderr /var/log/nginx/error.log \
-  && sed -e 's/^error_log.*/error_log stderr warn;/' /etc/nginx/nginx.conf > /tmp/nginx.conf.new \
-  && sed -e 's/access_log.*/access_log \/dev\/stdout;/' /tmp/nginx.conf.new > /tmp/nginx.conf.new2 \
-  && sed -e 's/^pid.*/pid \/tmp\/nginx.pid;/' /tmp/nginx.conf.new2 > /tmp/nginx.conf.new3 \
-  && mv /tmp/nginx.conf.new3 /etc/nginx/nginx.conf \
-  && chmod 777 /var/cache/nginx
-
-# /dev/stdout
-# && sed -e 's/^user/#user/' /etc/nginx/nginx.conf > /etc/nginx/nginx.conf
+COPY containerfiles /
 
 EXPOSE 8080 8443 8514
 
+# orig line
 # CMD ["nginx", "-g", "daemon off;"]
-# CMD ["/bin/bash","-c","read -t 500 lal"]
-# CMD ["/bin/bash","-c","sleep 500"]
+# test run
+CMD ["/bin/bash","-c","sleep 500"]
+# CMD ["/nginx-wrapper.sh"]
