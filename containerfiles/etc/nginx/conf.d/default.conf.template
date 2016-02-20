@@ -4,6 +4,8 @@ server {
 
     #charset koi8-r;
     #access_log  /var/log/nginx/log/host.access.log  main;
+    
+    access_log  syslog:server=${NGINX_TEST_PORT_8514_UDP_ADDR}:${NGINX_TEST_PORT_8514_UDP_PORT} main;
 
     location / {
         root   /usr/share/nginx/html;
