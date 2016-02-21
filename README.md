@@ -14,10 +14,10 @@ oc logs -f -c ng-socklog <thePod>
 
 a log enty looks like this.
 ```
-[al@localhost nginx-osev3]$ oc logs -f -c ng-socklog nginx-test-1-pf3cr
+[al@localhost nginx-osev3]$ oc logs -f -c ng-socklog nginx-test-2-6em5w
 listening on 0.0.0.0:8514, starting.
-10.1.4.1: local7.info: Feb 21 00:21:14 nginx-test-1-pf3cr nginx: 10.1.2.1 - - [21/Feb/2016:00:21:14 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.29.0" "<IP>"
-10.1.4.1: local7.info: Feb 21 00:21:21 nginx-test-1-pf3cr nginx: 10.1.2.1 - - [21/Feb/2016:00:21:21 +0000] "GET /asdasd HTTP/1.1" 404 169 "-" "curl/7.29.0" "<IP>"
+10.1.5.1: local7.info: Feb 21 00:30:08 nginx-test-2-6em5w nginx: <REAL_IP> - - [21/Feb/2016:00:30:08 +0000] "GET /asdasd HTTP/1.1" 404 169 "-" "curl/7.29.0" "<x_forwarded_for_IP>"
+10.1.5.1: local7.info: Feb 21 00:31:03 nginx-test-2-6em5w nginx: <REAL_IP> - - [21/Feb/2016:00:31:03 +0000] "GET / HTTP/1.1" 200 612 "my_referer" "curl/7.29.0" "<x_forwarded_for_IP>"
 ```
 
 # TODOs for a real setup
