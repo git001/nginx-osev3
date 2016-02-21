@@ -2,7 +2,12 @@
 
 Build and run nginx on Openshift version 3
 
-oc new-project nginx-test-project  
-oc new-app https://github.com/git001/nginx-osev3.git --name=nginx-test  
+oc new-project nginx-test  
+oc create -f nginx-osev3.yaml
 oc get pods  
-oc logs -f <thePod>  
+
+To get the nginx error logs you must select the nginx-test container  
+oc logs -f -c nginx-test <thePod>  
+
+To get the nginx access logs you must select the socklog container  
+oc logs -f -c ng-socklog <thePod>  

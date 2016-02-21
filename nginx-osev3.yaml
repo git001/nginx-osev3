@@ -90,15 +90,13 @@ items:
           deploymentconfig: nginx-test
       spec:
         containers:
-        - name: ng-socat
+        - name: ng-socklog
           image: nginx-test:latest
           command:
-           - /usr/bin/socat
-           - -d
-           - -d
-           - -u
-           - udp4-listen:8514,fork
-           - "-"
+           - /usr/sbin/socklog
+           - inet
+           - "0"
+           - "8514"
           ports:
           - containerPort: 8514
             protocol: UDP
@@ -122,7 +120,7 @@ items:
         automatic: true
         containerNames:
         - nginx-test
-        - ng-socat
+        - ng-socklog
         from:
           kind: ImageStreamTag
           name: nginx-test:latest
